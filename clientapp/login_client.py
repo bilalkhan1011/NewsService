@@ -113,7 +113,7 @@ login("admin", "123")
 
 
 #post_story("Smaller Tings", "art", "uk", "No idea")
-get_story("*", "*", "*")
+get_story("*", "uk", "*")
 #delete_story(73)
 
 

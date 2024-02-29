@@ -53,11 +53,13 @@ class NewsClient:
             print('Failed to post story. Error:', response.text)
 
     def get_stories(self, news_id=None, category=None, region=None, date=None):
+        print("get_stories region: ", region)
         params = {'story_cat': category, 'story_region': region, 'story_date': date}
         if news_id:
             response = self.session.get(f"{self.base_url}/api/stories/{news_id}", params=params)
         else:
             response = self.session.get(f"{self.base_url}/api/stories", params=params)
+            print("Response: ", response.text)
         if response.status_code == 200:
             print('Story requested successfully.')
             print('Response:', response.json())
@@ -97,21 +99,21 @@ class NewsClient:
             news_id = category = region = date = None
             for arg in args:
                 if arg.startswith('-id='):
-                    news_id = arg.split('=')[1]
+                    news_id = arg.split('=')[1].strip('"')
                 elif arg.startswith('-cat='):
-                    category = arg.split('=')[1]
+                    category = arg.split('=')[1].strip('"')
                 elif arg.startswith('-reg='):
-                    region = arg.split('=')[1]
+                    region = arg.split('=')[1].strip('"')
                 elif arg.startswith('-date='):
-                    date = arg.split('=')[1]
-            # Set default values for category, region, and date if not provided
+                    date = arg.split('=')[1].strip('"')
+
             if category is None:
                 category = '*'
             if region is None:
                 region = '*'
             if date is None:
                 date = '*'
-            self.get_stories(news_id, category, region, date)
+            self.get_stories(news_id=news_id, category=category, region=region, date=date)
         elif command == 'list':
             self.list_services()
         elif command.startswith('delete'):
