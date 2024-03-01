@@ -87,7 +87,7 @@ def story_handler(request):
 
             return JsonResponse({'message': 'CREATED'}, status=201)
         else:
-            return JsonResponse({'error': 'Unauthorized'}, status=401)
+            return JsonResponse({'error': 'You are not authorised to post to this service.'}, status=401)
     
 
 
@@ -144,10 +144,15 @@ def story_handler(request):
 def delete_story(request, key):
     try:
         story = Story.objects.get(id=key)
-        story.delete()
-        return JsonResponse({"message": "Story deleted successfully."}, status=200)
-    except ObjectDoesNotExist:
+    except Story.DoesNotExist:
         return JsonResponse({"message": "Story not found."}, status=404)
-    except Exception as e:
-        return JsonResponse({"message": str(e)}, status=503)
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({"message": "You must be logged in to delete a story."}, status=401)
+    
+    if request.user != story.author:
+        return JsonResponse({"message": "You are not authorized to delete this story."}, status=403)
+
+    story.delete()
+    return JsonResponse({"message": "Story deleted successfully."}, status=200)
     
