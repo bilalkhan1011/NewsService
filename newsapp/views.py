@@ -14,17 +14,6 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 # Create your views here.
-
-
-def Greet(request) :
-
-    if (request.method == 'GET'):
-        return HttpResponse("wagwan")
-    else:
-        return ("ONLY GET")
-
- 
-    
 @csrf_exempt
 def login_view(request):
 
@@ -37,7 +26,6 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-
             login(request, user)
             return JsonResponse({'message': f'Logged in as {user.username}'}, status=200)
         
@@ -73,9 +61,9 @@ def story_handler(request):
     if request.method == 'POST':
 
         user = request.user
-        author = Author.objects.filter(user=user).first()
 
         if user.is_authenticated:
+            author = Author.objects.filter(user=user).first()
 
             data = json.loads(request.body.decode('utf-8'))
             headline = data.get('headline')
@@ -125,9 +113,6 @@ def story_handler(request):
             except ValueError:
                 return JsonResponse({"error": "Invalid date format. Please provide date in DD/MM/YYYY format."}, status=400)
 
-
-        print("Query paramsss: ", query_params)
-
         stories = Story.objects.filter(**query_params)
         
         if stories.exists():
@@ -158,18 +143,11 @@ def story_handler(request):
 @csrf_exempt
 def delete_story(request, key):
     try:
-        # Get the story with the given key
         story = Story.objects.get(id=key)
-
-        # Delete the story
         story.delete()
-
-        # Return success response
         return JsonResponse({"message": "Story deleted successfully."}, status=200)
     except ObjectDoesNotExist:
-        # Return error response if the story does not exist
         return JsonResponse({"message": "Story not found."}, status=404)
     except Exception as e:
-        # Return error response for any other exceptions
         return JsonResponse({"message": str(e)}, status=503)
     
