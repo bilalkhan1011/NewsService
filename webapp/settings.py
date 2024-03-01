@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-7!tdcdfdbhi+uz9k^+sshmdkji&38igv-((c74sfkz8jjz$hur
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["ed18b5k.pythonanywhere.com"]
 
 SESSION_COOKIE_AGE = 3600  # Session expires after 1 hour (3600 seconds)
 
