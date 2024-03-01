@@ -130,8 +130,8 @@ def story_handler(request):
                 serialized_stories.append(serialized_story)
                 
             responsedata = {"stories": serialized_stories}
-            serialized_response = json.dumps(responsedata, indent=4)
-            return JsonResponse(serialized_response, safe=False, status=200)
+            #serialized_response = json.dumps(responsedata, indent=4)
+            return JsonResponse(responsedata,status=200)
         else:
             return JsonResponse({"message": "No stories found."}, status=404) 
     
