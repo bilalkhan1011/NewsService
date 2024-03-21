@@ -139,7 +139,6 @@ def story_handler(request):
         return JsonResponse({'error': 'Invalid request type'}, status=405)
 
 
-
 @csrf_exempt
 def delete_story(request, key):
     try:
@@ -150,7 +149,7 @@ def delete_story(request, key):
     if not request.user.is_authenticated:
         return JsonResponse({"message": "You must be logged in to delete a story."}, status=401)
     
-    if request.user != story.author:
+    if request.user != story.author.user:
         return JsonResponse({"message": "You are not authorized to delete this story."}, status=403)
 
     story.delete()
